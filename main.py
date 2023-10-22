@@ -1,7 +1,7 @@
 import openai
 import anvil.server
 anvil.server.connect("server_JI76JEO7OH75THQBUAEVU44J-DK36JKLLPLGZLZCW")
-openai.api_key = "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"
+openai.api_key = "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"
 buttonShow = False
 #completion_input = prompt + " There should be 3 sections: a response,  an 'Ingredients:' section, and a short 'Instuctions:' section." \
                 
@@ -19,13 +19,13 @@ def get_text(prommpt):
         sections = content.split("\n\n")
         ingredients = sections[1]
         instruction = sections[2] + sections[3]
-        return "Here is your recipe"
+        return True, "Here is your recipe"
     else:
         completion_input = prommpt + " Speak like a cute chef. Limit to one sentence"
         chat_completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content":
     completion_input}])
         content = chat_completion['choices'][0]['message']['content']
-        return content
+        return False, content
 
 @anvil.server.callable
 def send_name(name):
