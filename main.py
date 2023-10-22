@@ -1,9 +1,7 @@
 import openai
-openai.api_key = "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"
 from random import randint
-import anvil.server
-anvil.server.connect("server_ART2CTMLMXLUDH5KI5IHVMFK-DK36JKLLPLGZLZCW")
-openai.api_key = "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"
+#import anvil.server
+openai.api_key = ""
 buttonShow = False
 #completion_input = prompt + " There should be 3 sections: a response,  an 'Ingredients:' section, and a short 'Instuctions:' section." \
                 
@@ -13,11 +11,11 @@ imagesLinks = ["https://github.com/aayush-exe/hackthewave/blob/main/Images/girl1
                "https://github.com/aayush-exe/hackthewave/blob/main/Images/girl3.png?raw=true",
                "https://github.com/aayush-exe/hackthewave/blob/main/Images/girl4.png?raw=true",]
 
-@anvil.server.callable
+#@anvil.server.callable
 def get_image():
     return imagesLinks[randint(0,3)]
 
-@anvil.server.callable
+#@anvil.server.callable
 def send_name(name):
     global UsersName
     UsersName = name
@@ -36,7 +34,7 @@ recipe_greetings = [
     f"Okay {UsersName}, let's create a mouthwatering masterpiece today!"
 ]
 
-@anvil.server.callable
+#@anvil.server.callable
 def get_text(prommpt):
     if "recipe" in prommpt:
         return True, recipe_greetings[randint(0,9)]
@@ -47,21 +45,24 @@ def get_text(prommpt):
         content = chat_completion['choices'][0]['message']['content']
         return False, content
 
-@anvil.server.callable
+#@anvil.server.callable
 def get_recipe(prommpt):
-    completion_input = prommpt + " There should be 2 sections: an 'Ingredients:' section, and a short 'Instuctions:' section with no enters between each step" \
-                                   "Seperate each section with two enter statements. Don't put a space between the header."
+    completion_input = prommpt + " There should be 2 sections: 'Ingredients' and 'Instructions'. " \
+                                 "Seperate each ingredient and each instruction with new line. " \
+                                 "Seperate ingredient and instruction category with 2 new lines."
+
     chat_completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content":
     completion_input}])
     content = chat_completion['choices'][0]['message']['content']
-    sections = content.split("\n\n")
-    print(len(sections))
-    ingredients = sections[0:2]
-    instructions = sections[2:]
-    return ingredients, instructions
+    sections = content.split("\n")
+    ingredient_sections = sections[0:sections.index('Instructions:')]
+    instruction_sections = sections[sections.index('Instructions:'):]
 
 
+    return ingredient_sections, instruction_sections
 
+
+print(get_recipe("give me a recipe that uses eggs"))
 
 
 
@@ -79,6 +80,6 @@ def get_recipe(prommpt):
 # print(instructions)
 # print(image_url)'''
 
-anvil.server.wait_forever()
+#anvil.server.wait_forever()
 
 
