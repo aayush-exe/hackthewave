@@ -1,16 +1,26 @@
 import openai
 from random import randint
 import anvil.server
-
+anvil.server.connect("server_ART2CTMLMXLUDH5KI5IHVMFK-DK36JKLLPLGZLZCW")
+openai.api_key = "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"
 buttonShow = False
 #completion_input = prompt + " There should be 3 sections: a response,  an 'Ingredients:' section, and a short 'Instuctions:' section." \
                 
 UsersName = ""
+imagesLinks = ["https://github.com/aayush-exe/hackthewave/blob/main/Images/girl1.png?raw=true",
+               "https://github.com/aayush-exe/hackthewave/blob/main/Images/girl2.png?raw=true",
+               "https://github.com/aayush-exe/hackthewave/blob/main/Images/girl3.png?raw=true",
+               "https://github.com/aayush-exe/hackthewave/blob/main/Images/girl4.png?raw=true",]
+
+@anvil.server.callable
+def get_image():
+    return imagesLinks[randint(0,3)]
 
 @anvil.server.callable
 def send_name(name):
     global UsersName
     UsersName = name
+
 
 recipe_greetings = [
     f"Let's get started, {UsersName}, it's time to cook up something delicious!",
