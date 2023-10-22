@@ -14,7 +14,7 @@ imagesLinks = ["https://github.com/aayush-exe/hackthewave/blob/main/Images/girl1
                "https://github.com/aayush-exe/hackthewave/blob/main/Images/girl3.png?raw=true",
                "https://github.com/aayush-exe/hackthewave/blob/main/Images/girl4.png?raw=true",]
 
-@anvil.server.callable
+#@anvil.server.callable
 def get_image():
     return imagesLinks[randint(0,3)]
 
@@ -38,7 +38,7 @@ recipe_greetings = [
     f"Okay {UsersName}, let's create a mouthwatering masterpiece today!"
 ]
 
-@anvil.server.callable
+#@anvil.server.callable
 def get_text(prommpt):
     if "recipe" in prommpt:
         global recipePrompt
@@ -51,22 +51,24 @@ def get_text(prommpt):
         content = chat_completion['choices'][0]['message']['content']
         return False, content
 
-@anvil.server.callable
-def get_recipe():
-    completion_input = recipePrompt + " There should be 2 sections: an 'Ingredients:' section, and a short 'Instuctions:' section with no enters between each step" \
-                                   "Seperate each section with two enter statements. Don't put a space between the header."
+#@anvil.server.callable
+def get_recipe(prommpt):
+    completion_input = prommpt + " There should be 2 sections: 'Ingredients' and 'Instructions'. " \
+                                 "Seperate each ingredient and each instruction with new line. " \
+                                 "Seperate ingredient and instruction category with 2 new lines."
+
     chat_completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content":
     completion_input}])
     content = chat_completion['choices'][0]['message']['content']
-    sections = content.split("\n\n")
-    print(len(sections))
-    ingredients = sections[0:2]
-    instructions = sections[2:]
-    ##TEMPORARY
-    return ingredients, instructions
+    sections = content.split("\n")
+    ingredient_sections = sections[0:sections.index('Instructions:')]
+    instruction_sections = sections[sections.index('Instructions:'):]
 
 
+    return ingredient_sections, instruction_sections
 
+
+print(get_recipe("give me a recipe that uses eggs"))
 
 
 
@@ -84,6 +86,6 @@ def get_recipe():
 # print(instructions)
 # print(image_url)'''
 
-anvil.server.wait_forever()
+#anvil.server.wait_forever()
 
 
