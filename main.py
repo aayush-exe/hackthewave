@@ -1,13 +1,14 @@
 import openai
-openai.api_key = "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"
 from random import randint
 import anvil.server
-anvil.server.connect("server_ART2CTMLMXLUDH5KI5IHVMFK-DK36JKLLPLGZLZCW")
-openai.api_key = "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"
+anvil.server.connect("server_B3Y2CQ3OU7EHFSN4HTEWINUR-DK36JKLLPLGZLZCW")
+openai.api_key = "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"
 buttonShow = False
 #completion_input = prompt + " There should be 3 sections: a response,  an 'Ingredients:' section, and a short 'Instuctions:' section." \
                 
 UsersName = ""
+
+recipePrompt = ""
 imagesLinks = ["https://github.com/aayush-exe/hackthewave/blob/main/Images/girl1.png?raw=true",
                "https://github.com/aayush-exe/hackthewave/blob/main/Images/girl2.png?raw=true",
                "https://github.com/aayush-exe/hackthewave/blob/main/Images/girl3.png?raw=true",
@@ -16,6 +17,7 @@ imagesLinks = ["https://github.com/aayush-exe/hackthewave/blob/main/Images/girl1
 @anvil.server.callable
 def get_image():
     return imagesLinks[randint(0,3)]
+
 
 @anvil.server.callable
 def send_name(name):
@@ -39,6 +41,8 @@ recipe_greetings = [
 @anvil.server.callable
 def get_text(prommpt):
     if "recipe" in prommpt:
+        global recipePrompt
+        recipePrompt = prommpt
         return True, recipe_greetings[randint(0,9)]
     else:
         completion_input = prommpt + "Your name is Misaki, and you are a cute and friendly chef. You're happy to make conversation and help your friend, "+UsersName+" with whatever they might need. Limit to one sentence if you can, but retain a friendly, down-to-earth tone. Seem personable and friendly, and make some conversation if they are too. Name the user by name if possible, as a reminder the name is "+UsersName+"."
@@ -48,8 +52,8 @@ def get_text(prommpt):
         return False, content
 
 @anvil.server.callable
-def get_recipe(prommpt):
-    completion_input = prommpt + " There should be 2 sections: an 'Ingredients:' section, and a short 'Instuctions:' section with no enters between each step" \
+def get_recipe():
+    completion_input = recipePrompt + " There should be 2 sections: an 'Ingredients:' section, and a short 'Instuctions:' section with no enters between each step" \
                                    "Seperate each section with two enter statements. Don't put a space between the header."
     chat_completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content":
     completion_input}])
@@ -58,6 +62,7 @@ def get_recipe(prommpt):
     print(len(sections))
     ingredients = sections[0:2]
     instructions = sections[2:]
+    ##TEMPORARY
     return ingredients, instructions
 
 

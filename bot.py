@@ -55,6 +55,7 @@ SPECIFIC_MESSAGE = 'what message'
 
 
 
+
 async def send_message_to_target_user(client, content, targetUser):
     print("HERE???")
     for guild in client.guilds:
@@ -72,7 +73,7 @@ async def send_message(message, user_message, is_private):
         print(e)
 
 def run_discord_bot():
-    TOKEN = 'MTE2NTQxODA0MjEwNTI4NjY3Ng.G33qk0.MKt__iW9cbxRraeOYYHRlagvilpjMUEpYaU0SA'  # Make sure to keep your token private and not expose it in code
+    TOKEN = 'MTE2NTQxODA0MjEwNTI4NjY3Ng.Gs4fwk.bB5130m-rkMKQm43khd0lYuwL2P61QwCTN00R4'  # Make sure to keep your token private and not expose it in code
     intents = discord.Intents.default()
     intents.message_content = True
     intents.members = True
@@ -115,6 +116,7 @@ def run_discord_bot():
 
 
     client.run(TOKEN)
+    return client
 
         # You can call run_discord_bot() to start the bot
 
