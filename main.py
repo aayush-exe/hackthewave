@@ -1,7 +1,7 @@
 import os
 
 import openai
-openai.api_key = "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"
+openai.api_key = "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"
 
 user_input = input("Talk to the waifu!: ")
 completion_input = user_input + " There should be 3 sections: a response,  an 'Ingredients:' section, and a short 'Instuctions:' section." \
